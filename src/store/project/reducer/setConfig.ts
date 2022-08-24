@@ -1,9 +1,7 @@
 import { PayloadAction } from "@reduxjs/toolkit";
 import { WritableDraft } from "immer/dist/internal";
-import { RootState } from "../..";
 import {
   MarkupNameSpace,
-  PenInterface,
   ProjectInterface,
   ScriptNameSpace,
   StyleNameSpace,

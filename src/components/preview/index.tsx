@@ -32,6 +32,7 @@ export const Preview: FC<PreviewInterface> = (props) => {
         width: "100%",
         height: "100%",
         pointerEvents: disable ? "none" : "auto",
+        display: "block",
       }}
     ></iframe>
   );

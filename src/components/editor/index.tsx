@@ -12,8 +12,8 @@ export const CodeEditor: FC<CodeEditorInterface> = (props) => {
 
   const beforeMountEditor = (monaco: Monaco) => {
     import("monaco-themes/themes/Dracula.json").then((data: any) => {
-      monaco.editor.defineTheme("monokai", data);
-      monaco.editor.setTheme("monokai");
+      monaco.editor.defineTheme("Dracula", data);
+      monaco.editor.setTheme("Dracula");
     });
   };
 
@@ -21,7 +21,7 @@ export const CodeEditor: FC<CodeEditorInterface> = (props) => {
     <Editor
       height={"100%"}
       theme="vs-dark"
-      defaultLanguage={language}
+      defaultLanguage={language.toLowerCase()}
       defaultValue={value}
       beforeMount={beforeMountEditor}
       onChange={(value) => props.onChange(value || "")}

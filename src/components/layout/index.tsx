@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useSelector } from "react-redux";
 import SplitPane, { Pane } from "react-split-pane";
 import { getLayout } from "../../store/edit";
@@ -6,38 +7,57 @@ import { Preview } from "../preview";
 import { Markup } from "../editor/markup";
 import { StylePanel } from "../editor/style_panel";
 import { ScriptPanel } from "../editor/script_panel";
-import { useState } from "react";
+import { FC, useRef, useState } from "react";
 
-const LayoutTop = () => {
-  const [disablePreview, setDisablePreview] = useState<boolean>(false);
+const EditorSplit: FC<{ isTop: boolean }> = (props) => {
+  const { isTop } = props;
   return (
     <SplitPane
-      split="horizontal"
-      defaultSize="50%"
-      onDragStarted={() => setDisablePreview(true)}
-      onDragFinished={() => setDisablePreview(false)}
+      key={"splitpane"}
+      split={isTop ? "vertical" : "horizontal"}
+      size="33%"
+      minSize={24}
     >
-      <SplitPane split="vertical" size="33%">
-        <Markup></Markup>
-        <SplitPane split="vertical" size="50%">
-          <StylePanel></StylePanel>
-          <SplitPane split="vertical" size="100%">
-            <ScriptPanel></ScriptPanel>
-          </SplitPane>
+      <Markup></Markup>
+      <SplitPane
+        split={isTop ? "vertical" : "horizontal"}
+        size="50%"
+        minSize={24}
+      >
+        <StylePanel></StylePanel>
+        <SplitPane
+          split={isTop ? "vertical" : "horizontal"}
+          size="100%"
+          minSize={24}
+        >
+          <ScriptPanel></ScriptPanel>
         </SplitPane>
       </SplitPane>
-      <Preview disable={disablePreview}></Preview>
     </SplitPane>
   );
 };
 
 export const Layout = () => {
   const layout = useSelector(getLayout);
+  const [disablePreview, setDisablePreview] = useState<boolean>(false);
+  const ref = useRef<SplitPane>(null);
+  const isTop = layout === PanelNameSpace.LayoutType.TOP;
+  const isLeft = layout === PanelNameSpace.LayoutType.LEFT;
+  const isRight = layout === PanelNameSpace.LayoutType.RIGHT;
 
-  const layoutMap: Record<PanelNameSpace.LayoutType, React.ReactElement> = {
-    [PanelNameSpace.LayoutType.TOP]: <LayoutTop></LayoutTop>,
-    [PanelNameSpace.LayoutType.LEFT]: <LayoutTop></LayoutTop>,
-    [PanelNameSpace.LayoutType.RIGHT]: <LayoutTop></LayoutTop>,
-  };
-  return layoutMap[layout];
+  return (
+    <div style={{ width: "100%", height: "100%", position: "relative" }}>
+      <SplitPane
+        ref={ref}
+        split={isTop ? "horizontal" : "vertical"}
+        size="50%"
+        onDragStarted={() => setDisablePreview(true)}
+        onDragFinished={() => setDisablePreview(false)}
+      >
+        {isLeft && <Preview disable={disablePreview}></Preview>}
+        <EditorSplit isTop={isTop}></EditorSplit>
+        {isRight && <Preview disable={disablePreview}></Preview>}
+      </SplitPane>
+    </div>
+  );
 };

@@ -1,6 +1,6 @@
 export namespace MarkupNameSpace {
   export enum MarkupType {
-    HTML = "html",
+    HTML = "HTML",
   }
 
   export interface MarkupInterface {
@@ -11,9 +11,9 @@ export namespace MarkupNameSpace {
 
 export namespace StyleNameSpace {
   export enum StyleType {
-    CSS = "css",
-    SCSS = "scss",
-    LESS = "less",
+    CSS = "CSS",
+    SCSS = "Scss",
+    LESS = "Less",
   }
 
   export interface StyleInterface {
@@ -24,10 +24,10 @@ export namespace StyleNameSpace {
 
 export namespace ScriptNameSpace {
   export enum ScriptType {
-    JAVSCRIPT = "javascript",
-    TYPESCRIPT = "typescript",
-    REACT = "react",
-    REACT_TS = "react_ts",
+    JAVSCRIPT = "JavaScript",
+    TYPESCRIPT = "TypeScript",
+    REACT = "React",
+    REACT_TS = "React(ts)",
   }
 
   export interface StyleInterface {
@@ -43,8 +43,20 @@ export namespace PanelNameSpace {
     RIGHT = "right",
   }
 
+  export enum MessageType {
+    LOG = "log",
+    ERROR = "error",
+    WARNING = "warning",
+  }
+
+  export interface ConsoleMessageInterface {
+    type: MessageType;
+    message: string;
+  }
+
   export interface PanelInterface {
     layout: LayoutType;
+    consoleMessages: Array<ConsoleMessageInterface>;
   }
 }
 
