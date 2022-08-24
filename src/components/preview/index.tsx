@@ -19,6 +19,18 @@ export const Preview: FC<PreviewInterface> = (props) => {
     run(markup, style, script);
   }, [markup, style, script]);
 
+  useEffect(() => {
+    if (!ref.current) return;
+    window.addEventListener("message", receiveMessage);
+    return () => {
+      window.removeEventListener("message", receiveMessage);
+    };
+  }, [ref]);
+
+  const receiveMessage = (e: MessageEvent) => {
+    console.log(e.source === ref.current!.contentWindow);
+  };
+
   const { data, run } = useRequest(composeTogether, {
     debounceWait: 500,
     manual: true,
@@ -32,7 +44,6 @@ export const Preview: FC<PreviewInterface> = (props) => {
         width: "100%",
         height: "100%",
         pointerEvents: disable ? "none" : "auto",
-        display: "block",
       }}
     ></iframe>
   );

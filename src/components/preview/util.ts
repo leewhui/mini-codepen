@@ -1,4 +1,5 @@
 import { MarkupNameSpace, ScriptNameSpace, StyleNameSpace } from "../../type";
+import raw from "./proxy_console?raw";
 
 export const composeTogether = (
   markup: MarkupNameSpace.MarkupInterface,
@@ -23,7 +24,7 @@ const template = (code: string, style: string, script: string) => {
     </head>
     <body>
       ${code}
-
+      <script>${raw}</script>
       <script>
         ${script} 
       </script>

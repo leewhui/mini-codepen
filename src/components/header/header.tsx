@@ -28,7 +28,6 @@ export const Header = () => {
   return (
     <div className={styles["header-container"]}>
       <Popover
-        width={200}
         position="bottom"
         withArrow
         shadow="md"
@@ -58,7 +57,7 @@ export const Header = () => {
           >
             <RiLayoutLeftLine size="20"></RiLayoutLeftLine>
           </Button>
-          <Button
+          {/* <Button
             size="xs"
             variant="subtle"
             onClick={() =>
@@ -66,7 +65,7 @@ export const Header = () => {
             }
           >
             <RiLayoutRightLine size="20"></RiLayoutRightLine>
-          </Button>
+          </Button> */}
         </Popover.Dropdown>
       </Popover>
     </div>

@@ -42,8 +42,6 @@ export const Layout = () => {
   const [disablePreview, setDisablePreview] = useState<boolean>(false);
   const ref = useRef<SplitPane>(null);
   const isTop = layout === PanelNameSpace.LayoutType.TOP;
-  const isLeft = layout === PanelNameSpace.LayoutType.LEFT;
-  const isRight = layout === PanelNameSpace.LayoutType.RIGHT;
 
   return (
     <div style={{ width: "100%", height: "100%", position: "relative" }}>
@@ -54,9 +52,8 @@ export const Layout = () => {
         onDragStarted={() => setDisablePreview(true)}
         onDragFinished={() => setDisablePreview(false)}
       >
-        {isLeft && <Preview disable={disablePreview}></Preview>}
         <EditorSplit isTop={isTop}></EditorSplit>
-        {isRight && <Preview disable={disablePreview}></Preview>}
+        <Preview disable={disablePreview}></Preview>
       </SplitPane>
     </div>
   );
