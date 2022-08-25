@@ -1,13 +1,14 @@
 // @ts-nocheck
+
 import { useSelector } from "react-redux";
-import SplitPane, { Pane } from "react-split-pane";
+import SplitPane from "react-split-pane";
 import { getLayout } from "../../store/edit";
 import { PanelNameSpace } from "../../type";
 import { Preview } from "../preview";
 import { Markup } from "../editor/markup";
 import { StylePanel } from "../editor/style_panel";
 import { ScriptPanel } from "../editor/script_panel";
-import { FC, useRef, useState } from "react";
+import { FC, useState } from "react";
 
 const EditorSplit: FC<{ isTop: boolean }> = (props) => {
   const { isTop } = props;
@@ -40,17 +41,23 @@ const EditorSplit: FC<{ isTop: boolean }> = (props) => {
 export const Layout = () => {
   const layout = useSelector(getLayout);
   const [disablePreview, setDisablePreview] = useState<boolean>(false);
-  const ref = useRef<SplitPane>(null);
   const isTop = layout === PanelNameSpace.LayoutType.TOP;
+
+  const disable = () => {
+    setDisablePreview(true);
+  };
+
+  const enable = () => {
+    setDisablePreview(false);
+  };
 
   return (
     <div style={{ width: "100%", height: "100%", position: "relative" }}>
       <SplitPane
-        ref={ref}
         split={isTop ? "horizontal" : "vertical"}
         size="50%"
-        onDragStarted={() => setDisablePreview(true)}
-        onDragFinished={() => setDisablePreview(false)}
+        onDragStarted={disable}
+        onDragFinished={enable}
       >
         <EditorSplit isTop={isTop}></EditorSplit>
         <Preview disable={disablePreview}></Preview>

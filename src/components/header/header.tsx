@@ -1,11 +1,7 @@
 import { Button, createStyles, Popover } from "@mantine/core";
 import styles from "./header.module.less";
 import { AiOutlineLayout } from "react-icons/ai";
-import {
-  RiLayoutRightLine,
-  RiLayoutLeftLine,
-  RiLayoutTopLine,
-} from "react-icons/ri";
+import { RiLayoutLeftLine, RiLayoutTopLine } from "react-icons/ri";
 import { useDispatch } from "react-redux";
 import { changeLayoutType } from "../../store/edit";
 import { PanelNameSpace } from "../../type";
@@ -57,15 +53,6 @@ export const Header = () => {
           >
             <RiLayoutLeftLine size="20"></RiLayoutLeftLine>
           </Button>
-          {/* <Button
-            size="xs"
-            variant="subtle"
-            onClick={() =>
-              dispatch(changeLayoutType(PanelNameSpace.LayoutType.LEFT))
-            }
-          >
-            <RiLayoutRightLine size="20"></RiLayoutRightLine>
-          </Button> */}
         </Popover.Dropdown>
       </Popover>
     </div>

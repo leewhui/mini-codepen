@@ -3,6 +3,7 @@ import { useRequest } from "ahooks";
 import { getMarkup, getScript, getStyle } from "../../store/project";
 import { FC, useEffect, useRef, useState } from "react";
 import { composeTogether } from "./util";
+import { PanelNameSpace } from "../../type";
 
 interface PreviewInterface {
   disable: boolean;
@@ -22,13 +23,13 @@ export const Preview: FC<PreviewInterface> = (props) => {
   useEffect(() => {
     if (!ref.current) return;
     window.addEventListener("message", receiveMessage);
-    return () => {
-      window.removeEventListener("message", receiveMessage);
-    };
+    return () => window.removeEventListener("message", receiveMessage);
   }, [ref]);
 
   const receiveMessage = (e: MessageEvent) => {
-    console.log(e.source === ref.current!.contentWindow);
+    if (!ref.current || !ref.current.contentWindow) return;
+    if (e.source === ref.current.contentWindow) {
+    }
   };
 
   const { data, run } = useRequest(composeTogether, {
@@ -38,8 +39,9 @@ export const Preview: FC<PreviewInterface> = (props) => {
 
   return (
     <iframe
-      ref={ref}
+      allow="accelerometer; camera; encrypted-media; display-capture; geolocation; gyroscope; microphone; midi; clipboard-read; clipboard-write; web-share"
       srcDoc={data}
+      ref={ref}
       style={{
         width: "100%",
         height: "100%",
