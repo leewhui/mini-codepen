@@ -15,15 +15,32 @@ import {
 const initialState: ProjectInterface = {
   markup: {
     type: MarkupNameSpace.MarkupType.HTML,
-    code: "",
+    code: `<div id="app"></div>`,
   },
   style: {
     type: StyleNameSpace.StyleType.CSS,
-    code: "",
+    code: `#app {
+      background-color: #bfa;
+  }`,
   },
   script: {
-    type: ScriptNameSpace.ScriptType.JAVSCRIPT,
-    code: "",
+    type: ScriptNameSpace.ScriptType.REACT,
+    code: `
+    import React, { useState, useCallback } from 'react';
+    import ReactDom from 'react-dom';
+    
+    const Test = function () {
+      const [count, setCount] = useState(0);
+    
+      const handleClick = useCallback(() => {
+        setCount(count + 1);
+      }, [count]);
+    
+      return <div onClick={handleClick}>click me {count}</div>;
+    };
+    
+    ReactDom.render(<Test />, document.getElementById('app')); 
+    `,
   },
   depend: [],
 };

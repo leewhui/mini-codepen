@@ -12,7 +12,6 @@ export namespace MarkupNameSpace {
 export namespace StyleNameSpace {
   export enum StyleType {
     CSS = "CSS",
-    SCSS = "Scss",
     LESS = "Less",
   }
 
@@ -25,9 +24,7 @@ export namespace StyleNameSpace {
 export namespace ScriptNameSpace {
   export enum ScriptType {
     JAVSCRIPT = "JavaScript",
-    TYPESCRIPT = "TypeScript",
     REACT = "React",
-    REACT_TS = "React(ts)",
   }
 
   export interface StyleInterface {
@@ -36,6 +33,11 @@ export namespace ScriptNameSpace {
   }
 }
 
+export type CodeType =
+  | MarkupNameSpace.MarkupType
+  | StyleNameSpace.StyleType
+  | ScriptNameSpace.ScriptType;
+
 export namespace PanelNameSpace {
   export enum LayoutType {
     TOP = "top",
@@ -43,6 +45,12 @@ export namespace PanelNameSpace {
     RIGHT = "right",
   }
 
+  export interface PanelInterface {
+    layout: LayoutType;
+  }
+}
+
+export namespace ConsoleNameSpace {
   export enum MessageType {
     LOG = "log",
     ERROR = "error",
@@ -51,17 +59,13 @@ export namespace PanelNameSpace {
 
   export interface ConsoleMessageInterface {
     type: MessageType;
-    message: string;
-  }
-
-  export interface PanelInterface {
-    layout: LayoutType;
-    consoleMessages: Array<ConsoleMessageInterface>;
+    message: string | boolean | number;
   }
 }
 
 export interface EditInterface {
   panel: PanelNameSpace.PanelInterface;
+  console: ConsoleNameSpace.ConsoleMessageInterface[];
 }
 
 export interface ProjectInterface {

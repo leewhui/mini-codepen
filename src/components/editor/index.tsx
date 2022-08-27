@@ -17,12 +17,17 @@ export const CodeEditor: FC<CodeEditorInterface> = (props) => {
     });
   };
 
+  let editorLanguage = language.toLowerCase();
+  if (editorLanguage === "react") {
+    editorLanguage = "javascript";
+  }
+
   return (
     <Editor
       height={"100%"}
       theme="vs-dark"
-      defaultLanguage={language.toLowerCase()}
-      defaultValue={value}
+      language={editorLanguage}
+      value={value}
       beforeMount={beforeMountEditor}
       onChange={(value) => props.onChange(value || "")}
     ></Editor>

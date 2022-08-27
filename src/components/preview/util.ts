@@ -1,4 +1,5 @@
 import { MarkupNameSpace, ScriptNameSpace, StyleNameSpace } from "../../type";
+import { pipeline } from "../../utils/parse_pipeline";
 import raw from "./proxy_console?raw";
 
 export const composeTogether = (
@@ -7,7 +8,9 @@ export const composeTogether = (
   script: ScriptNameSpace.StyleInterface
 ): Promise<string> => {
   return new Promise((resolve) => {
-    resolve(template(markup.code, style.code, script.code));
+    pipeline(markup, style, script).then((values: string[]) => {
+      resolve(template(markup.code, values[0], values[1]));
+    });
   });
 };
 
@@ -21,14 +24,14 @@ const template = (code: string, style: string, script: string) => {
       <style>
         ${style} 
       </style>
+
+      <script defer>${raw}</script>
+      <script defer type="module">
+        ${script} 
+      </script>
     </head>
     <body>
       ${code}
-
-      <script>${raw}</script>
-      <script>
-        ${script} 
-      </script>
     </body>
   </html>
   

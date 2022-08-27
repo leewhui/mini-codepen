@@ -5,11 +5,12 @@ import { CodeEditor } from "..";
 import { getScript, setScriptConfig } from "../../../store/project";
 import { EditorHeader } from "../editor_header";
 import { BiCodeCurly } from "react-icons/bi";
-import { ScriptNameSpace } from "../../../type";
+import { CodeType, ScriptNameSpace } from "../../../type";
 
 export const ScriptPanel = () => {
   const scriptConfig = useSelector(getScript);
   const dispatch = useDispatch();
+  const ScriptType = ScriptNameSpace.ScriptType;
 
   const onChangeCode = (code: string) => {
     const scriptConfigClone = cloneDeep(scriptConfig);
@@ -17,18 +18,18 @@ export const ScriptPanel = () => {
     dispatch(setScriptConfig(scriptConfigClone));
   };
 
-  const ScriptType = ScriptNameSpace.ScriptType;
+  const onChangeType = (codeType: CodeType) => {
+    const scriptConfigClone = cloneDeep(scriptConfig);
+    scriptConfigClone.type = codeType as ScriptNameSpace.ScriptType;
+    dispatch(setScriptConfig(scriptConfigClone));
+  };
 
   return (
     <div className={styles["editor-container"]}>
       <EditorHeader
+        onChangeType={onChangeType}
         defaultValue={scriptConfig.type}
-        options={[
-          ScriptType.JAVSCRIPT,
-          ScriptType.REACT,
-          ScriptType.REACT_TS,
-          ScriptType.TYPESCRIPT,
-        ]}
+        options={[ScriptType.JAVSCRIPT, ScriptType.REACT]}
         title="Script"
         icon={<BiCodeCurly size={"20"} color="#f8d244" />}
       ></EditorHeader>

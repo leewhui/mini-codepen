@@ -1,24 +1,14 @@
 import { FC } from "react";
-import {
-  MarkupNameSpace,
-  ScriptNameSpace,
-  StyleNameSpace,
-} from "../../../type";
+import { CodeType } from "../../../type";
 import styles from "./editor_header.module.less";
 import { Select, createStyles } from "@mantine/core";
 
 interface EditorHeaderInterface {
   icon: React.ReactElement;
   title: string;
-  options:
-    | MarkupNameSpace.MarkupType[]
-    | StyleNameSpace.StyleType[]
-    | ScriptNameSpace.ScriptType[];
-
-  defaultValue:
-    | MarkupNameSpace.MarkupType
-    | StyleNameSpace.StyleType
-    | ScriptNameSpace.ScriptType;
+  options: CodeType[];
+  defaultValue: CodeType;
+  onChangeType: (type: CodeType) => void;
 }
 
 const useStyles = createStyles((theme) => ({
@@ -50,7 +40,7 @@ const useStyles = createStyles((theme) => ({
 }));
 
 export const EditorHeader: FC<EditorHeaderInterface> = (props) => {
-  const { icon, title, options, defaultValue } = props;
+  const { icon, title, options, defaultValue, onChangeType } = props;
   const { classes } = useStyles();
   return (
     <div className={styles["editor-header"]}>
@@ -65,6 +55,7 @@ export const EditorHeader: FC<EditorHeaderInterface> = (props) => {
         placeholder="Pick one"
         value={defaultValue}
         data={options.map((option) => ({ value: option, label: option }))}
+        onChange={onChangeType}
       />
     </div>
   );

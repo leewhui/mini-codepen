@@ -1,9 +1,9 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useRequest } from "ahooks";
 import { getMarkup, getScript, getStyle } from "../../store/project";
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useEffect, useRef } from "react";
 import { composeTogether } from "./util";
-import { PanelNameSpace } from "../../type";
+import { addConsoleMessage, clearConsoleMessage } from "../../store/edit";
 
 interface PreviewInterface {
   disable: boolean;
@@ -15,8 +15,10 @@ export const Preview: FC<PreviewInterface> = (props) => {
   const style = useSelector(getStyle);
   const script = useSelector(getScript);
   const ref = useRef<HTMLIFrameElement>(null);
+  const dispatch = useDispatch();
 
   useEffect(() => {
+    dispatch(clearConsoleMessage());
     run(markup, style, script);
   }, [markup, style, script]);
 
@@ -29,17 +31,20 @@ export const Preview: FC<PreviewInterface> = (props) => {
   const receiveMessage = (e: MessageEvent) => {
     if (!ref.current || !ref.current.contentWindow) return;
     if (e.source === ref.current.contentWindow) {
+      const data = e.data;
+      dispatch(
+        addConsoleMessage({ type: data.consoleType, message: data.message })
+      );
     }
   };
 
   const { data, run } = useRequest(composeTogether, {
-    debounceWait: 500,
+    debounceWait: 50,
     manual: true,
   });
 
   return (
     <iframe
-      allow="accelerometer; camera; encrypted-media; display-capture; geolocation; gyroscope; microphone; midi; clipboard-read; clipboard-write; web-share"
       srcDoc={data}
       ref={ref}
       style={{

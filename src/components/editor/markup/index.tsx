@@ -5,7 +5,7 @@ import { CodeEditor } from "..";
 import { getMarkup, setMarkupConfig } from "../../../store/project";
 import { EditorHeader } from "../editor_header";
 import { AiFillHtml5 } from "react-icons/ai";
-import { MarkupNameSpace } from "../../../type";
+import { CodeType, MarkupNameSpace } from "../../../type";
 
 export const Markup = () => {
   const markup = useSelector(getMarkup);
@@ -17,9 +17,16 @@ export const Markup = () => {
     dispatch(setMarkupConfig(markupClone));
   };
 
+  const onChangeType = (codeType: CodeType) => {
+    const markupClone = cloneDeep(markup);
+    markupClone.type = codeType as MarkupNameSpace.MarkupType;
+    dispatch(setMarkupConfig(markupClone));
+  };
+
   return (
     <div className={styles["editor-container"]}>
       <EditorHeader
+        onChangeType={onChangeType}
         defaultValue={markup.type}
         options={[MarkupNameSpace.MarkupType.HTML]}
         title="Markup"

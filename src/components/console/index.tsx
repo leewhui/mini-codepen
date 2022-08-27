@@ -1,16 +1,20 @@
-import { FC, useEffect, useState } from "react";
-import { PanelNameSpace } from "../../type";
+import { useSelector } from "react-redux";
+import { getConsoleMessage } from "../../store/edit";
+import { ConsoleNameSpace } from "../../type";
 
-interface ConsoleInterface {
-  messages: PanelNameSpace.ConsoleMessageInterface[];
-}
-
-export const ConsolePanel: FC<ConsoleInterface> = (props) => {
+export const ConsolePanel = () => {
+  const consoleMessage = useSelector(getConsoleMessage);
   return (
-    <div>
-      {props.messages.map((message: PanelNameSpace.ConsoleMessageInterface) => (
-        <p>{message.message}</p>
-      ))}
+    <div
+      style={{
+        overflow: "auto",
+      }}
+    >
+      {consoleMessage.map(
+        (message: ConsoleNameSpace.ConsoleMessageInterface) => (
+          <p>{message.message}</p>
+        )
+      )}
     </div>
   );
 };
