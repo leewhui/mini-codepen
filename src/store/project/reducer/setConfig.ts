@@ -24,7 +24,7 @@ export const setStyleConfigAction = (
 
 export const setScriptConfigAction = (
   state: WritableDraft<ProjectInterface>,
-  action: PayloadAction<ScriptNameSpace.StyleInterface>
+  action: PayloadAction<ScriptNameSpace.ScriptInterface>
 ) => {
   state.script = action.payload;
 };

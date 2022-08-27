@@ -27,7 +27,7 @@ export namespace ScriptNameSpace {
     REACT = "React",
   }
 
-  export interface StyleInterface {
+  export interface ScriptInterface {
     type: ScriptType;
     code: string;
   }
@@ -71,8 +71,7 @@ export interface EditInterface {
 export interface ProjectInterface {
   markup: MarkupNameSpace.MarkupInterface;
   style: StyleNameSpace.StyleInterface;
-  script: ScriptNameSpace.StyleInterface;
-  depend: string[];
+  script: ScriptNameSpace.ScriptInterface;
 }
 
 export interface PenInterface {

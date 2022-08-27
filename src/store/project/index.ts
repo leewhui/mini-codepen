@@ -42,7 +42,6 @@ const initialState: ProjectInterface = {
     ReactDom.render(<Test />, document.getElementById('app')); 
     `,
   },
-  depend: [],
 };
 
 export const projectSlice = createSlice({
