@@ -6,7 +6,6 @@ import { Markup } from "../editor/markup";
 import { StylePanel } from "../editor/style_panel";
 import { ScriptPanel } from "../editor/script_panel";
 import { FC, useState } from "react";
-import { ConsolePanel } from "../console";
 import "./splitter.css";
 import SplitterLayout from "react-splitter-layout";
 
@@ -42,20 +41,11 @@ export const Layout = () => {
       <SplitterLayout
         primaryIndex={0}
         vertical={true}
-        secondaryInitialSize={100}
         onDragStart={disable}
         onDragEnd={enable}
       >
-        <SplitterLayout
-          primaryIndex={0}
-          vertical={true}
-          onDragStart={disable}
-          onDragEnd={enable}
-        >
-          <EditorSplit isTop={isTop}></EditorSplit>
-          <Preview disable={disablePreview}></Preview>
-        </SplitterLayout>
-        <ConsolePanel></ConsolePanel>
+        <EditorSplit isTop={isTop}></EditorSplit>
+        <Preview disable={disablePreview}></Preview>
       </SplitterLayout>
     </div>
   );

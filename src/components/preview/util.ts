@@ -5,11 +5,12 @@ import raw from "./proxy_console?raw";
 export const composeTogether = (
   markup: MarkupNameSpace.MarkupInterface,
   style: StyleNameSpace.StyleInterface,
-  script: ScriptNameSpace.StyleInterface
-): Promise<string> => {
+  script: ScriptNameSpace.ScriptInterface
+): Promise<{ code: string }> => {
   return new Promise((resolve) => {
     pipeline(markup, style, script).then((values: string[]) => {
-      resolve(template(markup.code, values[0], values[1]));
+      const code = template(markup.code, values[0], values[1]);
+      resolve({ code });
     });
   });
 };

@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useRequest } from "ahooks";
 import { getMarkup, getScript, getStyle } from "../../store/project";
-import { FC, useEffect, useRef } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { composeTogether } from "./util";
 import { addConsoleMessage, clearConsoleMessage } from "../../store/edit";
 
@@ -18,7 +18,6 @@ export const Preview: FC<PreviewInterface> = (props) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(clearConsoleMessage());
     run(markup, style, script);
   }, [markup, style, script]);
 
@@ -32,22 +31,27 @@ export const Preview: FC<PreviewInterface> = (props) => {
     if (!ref.current || !ref.current.contentWindow) return;
     if (e.source === ref.current.contentWindow) {
       const data = e.data;
-      dispatch(
-        addConsoleMessage({ type: data.consoleType, message: data.message })
-      );
+      const message = { type: data.consoleType, message: data.message };
+      dispatch(addConsoleMessage(message));
     }
   };
 
   const { data, run } = useRequest(composeTogether, {
-    debounceWait: 50,
+    debounceWait: 500,
     manual: true,
   });
 
+  useEffect(() => {
+    if (!ref.current || !ref.current.srcdoc || !data) return;
+    ref.current.srcdoc = data.code;
+  }, [data]);
+
   return (
     <iframe
-      srcDoc={data}
       ref={ref}
+      srcDoc={data?.code}
       style={{
+        border: "none",
         width: "100%",
         height: "100%",
         pointerEvents: disable ? "none" : "auto",

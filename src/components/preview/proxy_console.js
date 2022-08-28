@@ -11,10 +11,11 @@ window.console.log = function (arguments) {
   window.parent.postMessage(message);
 };
 
-window.console.error = function (arguments) {
-  console.dir(arguments);
-};
-
-window.console.error = function (arguments) {
-  console.dir(arguments);
-};
+window.addEventListener("error", (event) => {
+  const message = {
+    consoleType: "error",
+    messageType: "string",
+    message: event.error.message,
+  };
+  window.parent.postMessage(message);
+});
