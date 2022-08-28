@@ -8,7 +8,7 @@ const reactDomRegx = /import (.*) from ['|"]react-dom['|"]/;
 export const pipeline = async (
   markup: MarkupNameSpace.MarkupInterface,
   style: StyleNameSpace.StyleInterface,
-  script: ScriptNameSpace.StyleInterface
+  script: ScriptNameSpace.ScriptInterface
 ) => {
   const result = await Promise.all([parseStyle(style), parseScript(script)]);
   return result;
@@ -24,7 +24,7 @@ function parseStyle(style: StyleNameSpace.StyleInterface): Promise<string> {
   });
 }
 
-function parseScript(script: ScriptNameSpace.StyleInterface): Promise<string> {
+function parseScript(script: ScriptNameSpace.ScriptInterface): Promise<string> {
   return new Promise((res, rej) => {
     if (script.type === ScriptNameSpace.ScriptType.REACT) {
       let output = transform(script.code, { presets: ["react"] }).code;
