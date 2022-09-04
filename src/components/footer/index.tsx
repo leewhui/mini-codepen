@@ -18,7 +18,7 @@ export const Footer = () => {
         </Button>
         <Text color="#eee">
           This app is designed and created by Wenhui Li. The purpose of this app
-          is for his beloved girlfirend, Jiawei Ye to learn coding
+          is for his beloved girlfriend, Jiawei Ye to learn coding
         </Text>
       </div>
     </div>
