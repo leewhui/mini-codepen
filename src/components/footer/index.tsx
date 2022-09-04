@@ -1,4 +1,4 @@
-import { Button } from "@mantine/core";
+import { Button, Text } from "@mantine/core";
 import { useState } from "react";
 import { ConsolePanel } from "../console";
 import styles from "./footer.module.less";
@@ -16,6 +16,10 @@ export const Footer = () => {
         >
           Console
         </Button>
+        <Text color="#eee">
+          This app is designed and created by Wenhui Li. The purpose of this app
+          is for his beloved girlfirend, Jiawei Ye to learn coding
+        </Text>
       </div>
     </div>
   );
