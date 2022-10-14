@@ -1,93 +1,67 @@
-import {
-  Button,
-  Center,
-  createStyles,
-  Group,
-  Popover,
-  Tabs,
-} from "@mantine/core";
-import { Modal } from "@mantine/core";
-import styles from "./header.module.less";
-import { AiOutlineLayout, AiOutlineSetting } from "react-icons/ai";
-import { RiLayoutTopLine } from "react-icons/ri";
-import { useDispatch } from "react-redux";
-import { changeLayoutType } from "../../store/edit";
-import { PanelNameSpace } from "../../type";
-import { useState } from "react";
-import { StyledTabs } from "./StyledTabs";
+import { Button, Text, Checkbox } from '@mantine/core';
+import styles from './header.module.less';
+import { AiOutlineSetting } from 'react-icons/ai';
+import { FC, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { getMarkup, getScript, getStyle } from '../../store/project';
+import { composeTogether } from '../preview/util';
+import { useRequest } from 'ahooks';
+import { ConfigModal } from './configModal';
 
-const useStyles = createStyles((theme) => ({
-  dropdown: {
-    backgroundColor: "#3a414b",
-    border: "none",
-    display: "flex",
-    justifyContent: "center",
-  },
-  arrow: {
-    borderColor: "#3a414b",
-  },
-}));
+interface HeaderInterface {
+	onUpdateCode: (code: string) => void;
+}
 
-export const Header = () => {
-  const { classes } = useStyles();
-  const dispatch = useDispatch();
-  const [settingOpen, setSettingOpen] = useState<boolean>(false);
+export const Header: FC<HeaderInterface> = (props) => {
+	const [ settingOpen, setSettingOpen ] = useState<boolean>(false);
+	const [ isAutoRun, setIsAutoRun ] = useState<boolean>(true);
 
-  return (
-    <div className={styles["header-container"]}>
-      <Popover
-        position="bottom"
-        withArrow
-        shadow="md"
-        classNames={{ dropdown: classes.dropdown, arrow: classes.arrow }}
-      >
-        <Popover.Target>
-          <Button size="xs" variant="subtle">
-            <AiOutlineLayout size="20"></AiOutlineLayout>
-          </Button>
-        </Popover.Target>
-        <Popover.Dropdown>
-          <Button
-            size="xs"
-            variant="subtle"
-            onClick={() =>
-              dispatch(changeLayoutType(PanelNameSpace.LayoutType.TOP))
-            }
-          >
-            <RiLayoutTopLine size="20"></RiLayoutTopLine>
-          </Button>
-        </Popover.Dropdown>
-      </Popover>
+	const markup = useSelector(getMarkup);
+	const style = useSelector(getStyle);
+	const script = useSelector(getScript);
 
-      <Button size="xs" variant="subtle" onClick={() => setSettingOpen(true)}>
-        <AiOutlineSetting size="20"></AiOutlineSetting>
-      </Button>
+	const handleUpdateCode = () => {
+		composeTogether(markup, style, script).then((data) => props.onUpdateCode(data.code));
+	};
 
-      <Modal
-        title={
-          <Group spacing="xs">
-            <AiOutlineSetting size="20" />
-            设置
-          </Group>
-        }
-        centered
-        opened={settingOpen}
-        onClose={() => setSettingOpen(false)}
-      >
-        <StyledTabs defaultValue="Markup">
-          <Center>
-            <Tabs.List>
-              <Tabs.Tab value="Markup">Markup</Tabs.Tab>
-              <Tabs.Tab value="Style">Style</Tabs.Tab>
-              <Tabs.Tab value="Script">Script</Tabs.Tab>
-            </Tabs.List>
-          </Center>
+	useEffect(
+		() => {
+			if (!isAutoRun) return;
+			run(markup, style, script);
+		},
+		[ markup, style, script ]
+	);
 
-          <Tabs.Panel value="Markup">markup panel</Tabs.Panel>
-          <Tabs.Panel value="Style">style panel</Tabs.Panel>
-          <Tabs.Panel value="Script">script panel</Tabs.Panel>
-        </StyledTabs>
-      </Modal>
-    </div>
-  );
+	const { data, run } = useRequest(composeTogether, {
+		debounceWait: 200,
+		manual: true
+	});
+
+	useEffect(
+		() => {
+			if (!data || !data.code) return;
+			props.onUpdateCode(data.code);
+		},
+		[ data ]
+	);
+
+	return (
+		<div className={styles['header-container']}>
+			<Button size="xs" variant="subtle" onClick={() => setSettingOpen(true)}>
+				<AiOutlineSetting size="20" />
+			</Button>
+
+			<Button size="xs" variant="subtle" onClick={handleUpdateCode}>
+				运行
+			</Button>
+
+			<Checkbox
+				size="xs"
+				label={<Text color="white">自动运行</Text>}
+				checked={isAutoRun}
+				onChange={(e) => setIsAutoRun(e.currentTarget.checked)}
+			/>
+			<ConfigModal opened={settingOpen} onClose={() => setSettingOpen(false)} />
+		</div>
+	);
 };
